@@ -66,7 +66,7 @@ curl -X GET http://localhost:5000/svc/summerizer
 filer by both service and developer
 
 ```
-curl -X GET http://localhost:5000/both/hassan,summerizer
+curl -X GET http://localhost:5000/both/dyaa,summerizer
 [
     {
         "svc": "summerizer",

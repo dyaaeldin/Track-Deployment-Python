@@ -2,13 +2,17 @@
 Track k8s deployment
 
 ## Deploy service
+
 1. docker-compose
 ```
 docker-compose up -d 
 ```
 2. k8s
 still working on helm chart
+
+
 ## Usage:
+
 
 ### Register deployment
 pipeline should have a stage that append these info to dtracker through curl
@@ -19,7 +23,7 @@ curl -H "Content-Type: application/json" -X POST http://localhost:5000 -d '{"svc
 
 ### Fetch from dtracker
 
-filter by developer name:
+Filter by developer name:
 
 ```
 curl -X GET http://localhost:5000/developer/dyaa
@@ -41,7 +45,7 @@ curl -X GET http://localhost:5000/developer/dyaa
 ]
 ```
 
-filter by service name:
+Filter by service name:
 
 ```
 curl -X GET http://localhost:5000/svc/summerizer
@@ -63,7 +67,7 @@ curl -X GET http://localhost:5000/svc/summerizer
 ]
 ```
 
-filer by both service and developer
+Filer by both service and developer
 
 ```
 curl -X GET http://localhost:5000/both/dyaa,summerizer

@@ -1,5 +1,5 @@
 # DTRACKER
-Track k8s deployment process on services
+Track k8s deployment
 
 ## Deploy service
 1. docker-compose

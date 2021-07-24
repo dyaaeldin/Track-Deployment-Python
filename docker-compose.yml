@@ -21,7 +21,6 @@ services:
     ports: 
       - 5000:5000
     build: ./
-    command: sh -c "sleep 10000000"
     restart: always
     environment: 
       - MYSQL_USERNAME=servicesuser

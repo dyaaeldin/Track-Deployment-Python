@@ -1,0 +1,35 @@
+version: '2.1'
+
+services:
+  mysql:
+    image: docker.io/bitnami/mysql:5.7.28
+    expose:
+      - '3306'
+    volumes:
+      - 'mysql_data:/bitnami/mysql/data'
+    environment:
+      - MYSQL_ROOT_PASSWORD=rootpass
+      - MYSQL_USER=servicesuser
+      - MYSQL_PASSWORD=servicespass
+      - MYSQL_DATABASE=servicesdb 
+    healthcheck:
+      test: ['CMD', '/opt/bitnami/scripts/mysql/healthcheck.sh']
+      interval: 15s
+      timeout: 5s
+      retries: 6
+  dtracker:
+    ports: 
+      - 5000:5000
+    build: ./
+    command: sh -c "sleep 10000000"
+    restart: always
+    environment: 
+      - MYSQL_USERNAME=servicesuser
+      - MYSQL_PASSWORD=servicespass
+      - MYSQL_DATABASE=servicesdb
+      - MYSQL_HOSTNAME=mysql
+    depends_on:
+      - mysql
+volumes:
+  mysql_data:
+    driver: local

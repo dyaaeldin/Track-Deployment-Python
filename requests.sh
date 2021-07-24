@@ -1,0 +1,2 @@
+curl -H "Content-Type: application/json" -X POST http://localhost:5000 -d '{"svc_name": "summerizer", "developer_name": "hassan", "commit_id": "commit1", "commit_message": "feature1"}'
+curl -X GET http://localhost:5000/document_parser

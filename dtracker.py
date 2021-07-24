@@ -2,6 +2,10 @@ from flask import Flask
 from flask_restful import Api, Resource, reqparse, abort
 import mysql.connector as mysql
 import os
+from datetime import datetime
+
+now = datetime.now()
+time = now.strftime("%d/%m/%Y %H:%M:%S")
 
 app = Flask(__name__)
 api = Api(app)
@@ -32,14 +36,15 @@ def add_table_if_not_exist():
            svc varchar(20),
            developer varchar(20),
            commit varchar(250),
-           message varchar(250)
+           message varchar(250),
+           time varchar(500)
     )'''
     cursor.execute(create_table)
 
 def append_to_database(svc_name, commit_id, developer_name, commit_message):
     add_table_if_not_exist()
-    query = """insert into services (svc, commit, developer, message) values (%s, %s, %s, %s)"""
-    cursor.execute(query, (svc_name, commit_id, developer_name, commit_message))
+    query = """insert into services (svc, commit, developer, message, time) values (%s, %s, %s, %s, %s)"""
+    cursor.execute(query, (svc_name, commit_id, developer_name, commit_message, time))
     db.commit()
 
 class add(Resource):
@@ -69,7 +74,7 @@ class fetch_by_service(Resource):
             return listrecords
         except:
            print ("cant connect to database")
- 
+
 class fetch_by_developer(Resource):
     def get(self,developer_name):
         try:
@@ -90,8 +95,6 @@ class fetch_by_both(Resource):
         try:
             developer_name = both.split(",")[0]
             svc_name = both.split(",")[1]
-            print(developer_name)
-            print(svc_name) 
             add_table_if_not_exist()
             query = """select * from services where developer = '%s' and svc = '%s' """ %(developer_name, svc_name)
             cursor.execute(query)

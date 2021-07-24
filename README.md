@@ -15,7 +15,7 @@ still working on helm chart
 
 
 ### Register deployment
-pipeline should have a stage that append these info to dtracker through curl
+pipeline should have a stage that send these values to dtracker
 
 ```
 curl -H "Content-Type: application/json" -X POST http://localhost:5000 -d '{"svc_name": "summerizer", "developer_name": "dyaa", "commit_id": "commit3", "commit_message": "feature3"}'

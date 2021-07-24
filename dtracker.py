@@ -44,28 +44,72 @@ def append_to_database(svc_name, commit_id, developer_name, commit_message):
 
 class add(Resource):
     def post(self):
-        args = recieved_args.parse_args()
-        svc_name = args["svc_name"]
-        commit_id = args["commit_id"]
-        developer_name = args["developer_name"]
-        commit_message = args["commit_message"]
-        append_to_database(svc_name,commit_id,developer_name,commit_message)
-        return {"message": "added"}
+        try:
+            args = recieved_args.parse_args()
+            svc_name = args["svc_name"]
+            commit_id = args["commit_id"]
+            developer_name = args["developer_name"]
+            commit_message = args["commit_message"]
+            append_to_database(svc_name,commit_id,developer_name,commit_message)
+            return {"message": "added"}
+        except:
+            return {"message": "cant add to database"}
 
-class fetch(Resource):
+class fetch_by_service(Resource):
     def get(self,svc_name):
-        add_table_if_not_exist()
-        query = """select * from services where svc = '%s'""" %(svc_name)
-        cursor.execute(query)
-        records = cursor.fetchall()
-        listrecords = []
-        columnNames = [column[0] for column in cursor.description]
-        for record in records:
-            listrecords.append(dict(zip(columnNames , record)))
-        return listrecords
+        try:
+            add_table_if_not_exist()
+            query = """select * from services where svc = '%s'""" %(svc_name)
+            cursor.execute(query)
+            records = cursor.fetchall()
+            listrecords = []
+            columnNames = [column[0] for column in cursor.description]
+            for record in records:
+                listrecords.append(dict(zip(columnNames , record)))
+            return listrecords
+        except:
+           print ("cant connect to database")
+ 
+class fetch_by_developer(Resource):
+    def get(self,developer_name):
+        try:
+            add_table_if_not_exist()
+            query = """select * from services where developer = '%s'""" %(developer_name)
+            cursor.execute(query)
+            records = cursor.fetchall()
+            listrecords = []
+            columnNames = [column[0] for column in cursor.description]
+            for record in records:
+                listrecords.append(dict(zip(columnNames , record)))
+            return listrecords
+        except:
+           print ("cant connect to database")
+
+class fetch_by_both(Resource):
+    def get(self, both):
+        try:
+            developer_name = both.split(",")[0]
+            svc_name = both.split(",")[1]
+            print(developer_name)
+            print(svc_name) 
+            add_table_if_not_exist()
+            query = """select * from services where developer = '%s' and svc = '%s' """ %(developer_name, svc_name)
+            cursor.execute(query)
+            records = cursor.fetchall()
+            listrecords = []
+            columnNames = [column[0] for column in cursor.description]
+            for record in records:
+                listrecords.append(dict(zip(columnNames , record)))
+            return listrecords
+        except:
+           print ("cant connect to database")
+
 
 api.add_resource(add, "/")
-api.add_resource(fetch, "/<string:svc_name>")
+api.add_resource(fetch_by_service, "/svc/<string:svc_name>")
+api.add_resource(fetch_by_developer, "/developer/<string:developer_name>")
+api.add_resource(fetch_by_both, "/both/<string:both>")
+
 
 if __name__ == "__main__":
     app.run(debug=True)
